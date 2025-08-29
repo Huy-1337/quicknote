@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Notes App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-sticky-note"></i> Quick Notes</h1>
+            <p>Capture your thoughts, organize your ideas</p>
+        </div>
+
+        <div class="app-container">
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search notes...">
+                </div>
+                
+                <button class="btn btn-primary" onclick="openNoteModal()">
+                    <i class="fas fa-plus"></i> New Note
+                </button>
+                <button class="btn btn-secondary" id="themeToggleBtn" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i> Theme
+                </button>
+                <button class="btn btn-outline" id="exportBtn" title="Export notes">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
+                <button class="btn btn-outline" id="importBtn" title="Import notes" onclick="document.getElementById('importInput').click()">
+                    <i class="fas fa-file-import"></i> Import
+                </button>
+                <input type="file" id="importInput" accept="application/json" style="display:none" />
+                
+                <div class="category-filter" id="categoryFilter">
+                    <div class="category-tag active" data-category="all">All</div>
+                    <div class="category-tag" data-category="work">Work</div>
+                    <div class="category-tag" data-category="personal">Personal</div>
+                    <div class="category-tag" data-category="ideas">Ideas</div>
+                    <div class="category-tag" data-category="todo">Todo</div>
+                </div>
+
+                <div class="category-filter" id="tagsFilter" style="margin-left:auto"></div>
+            </div>
+
+            <div class="main-content">
+                <div class="sidebar">
+                    <h3>Statistics</h3>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalNotes">0</div>
+                            <div class="stat-label">Total Notes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="pinnedNotes">0</div>
+                            <div class="stat-label">Pinned</div>
+                        </div>
+                    </div>
+
+                    <h3>Categories</h3>
+                    <div id="categoryStats"></div>
+                </div>
+
+                <div class="notes-container">
+                    <div class="pinned-section" id="pinnedSection" style="display: none;">
+                        <h3 class="section-title">
+                            <i class="fas fa-thumbtack"></i> Pinned Notes
+                        </h3>
+                        <div class="pinned-notes" id="pinnedNotes"></div>
+                    </div>
+
+                    <div class="notes-grid" id="notesGrid">
+                        <div class="empty-state">
+                            <i class="fas fa-notes-medical"></i>
+                            <h3>No notes yet</h3>
+                            <p>Create your first note to get started!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal" id="noteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">New Note</h3>
+                <button class="close-btn" onclick="closeNoteModal()">&times;</button>
+            </div>
+            <form id="noteForm">
+                <div class="form-group">
+                    <label class="form-label" for="noteTitle">Title</label>
+                    <input type="text" id="noteTitle" class="form-input" placeholder="Enter note title..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="noteContent">Content</label>
+                    <textarea id="noteContent" class="form-textarea" placeholder="Write your note here..." required></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="noteCategory">Category</label>
+                        <select id="noteCategory" class="form-select">
+                            <option value="personal">Personal</option>
+                            <option value="work">Work</option>
+                            <option value="ideas">Ideas</option>
+                            <option value="todo">Todo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="notePriority">Priority</label>
+                        <select id="notePriority" class="form-select">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="noteTags">Tags (comma separated)</label>
+                    <input type="text" id="noteTags" class="form-input" placeholder="e.g. study, idea, urgent">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeNoteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Note
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="./app.js"></script>
+</body>
+</html>
+
+
